@@ -1,4 +1,6 @@
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MaxAbsScaler
+from sklearn.preprocessing import RobustScaler
 from sklearn.decomposition import PCA
 import pandas as pd
 
@@ -7,12 +9,28 @@ class getPCA:
         self.pca = PCA(n_components=n_components)
         self.data = None 
 
-    def apply_scale(self, data):
+    def apply_StandardScaler(self, data):
         scaler = StandardScaler()
         scaler.fit(data)
         scaled = scaler.transform(data)
         
         return scaled
+
+    def apply_MaxAbsScaler(self, data):
+        scaler = MaxAbsScaler()
+        scaler.fit(data)
+        scaled = scaler.transform(data)
+
+        return scaled
+
+    def apply_RobustScaler(self, data):
+        scaler = RobustScaler()
+        scaler.fit(data)
+        scaled = scaler.transform(data)
+
+        return scaled
+    
+
     
     def apply_pca(self, scaled_data):
         self.pca.fit(scaled_data)
