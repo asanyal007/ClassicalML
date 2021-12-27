@@ -10,13 +10,13 @@ def apply_smote(X,y):
 
     return X_s, y_s
 
-def appy_undersample(X, y) :
+def appy_undersample(X, y, sampling_ratio) :
     from imblearn.under_sampling import RandomUnderSampler
-    ros = RandomUnderSampler(random_state=42, sampling_strategy = {0: 18213, 1: 8213})
-    print("Before OverSampling, counts of label '1': {}".format(sum(y==1)))
-    print("Before OverSampling, counts of label '0': {} \n".format(sum(y==0)))
+    ros = RandomUnderSampler(random_state=42, sampling_strategy = sampling_ratio)
+    print("Before UnderSampling, counts of label '1': {}".format(sum(y==1)))
+    print("Before UnderSampling, counts of label '0': {} \n".format(sum(y==0)))
     X_us, y_us = ros.fit_resample(X, y)
-    print("after OverSampling, counts of label '1': {}".format(sum(y_us==1)))
-    print("after OverSampling, counts of label '0': {} \n".format(sum(y_us==0)))
+    print("after UnderSampling, counts of label '1': {}".format(sum(y_us==1)))
+    print("after UnderSampling, counts of label '0': {} \n".format(sum(y_us==0)))
 
     return X_us, y_us 
