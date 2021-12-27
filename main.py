@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 import pca
 import smote
 import SVM
-import lime.lime_tabular
+#import lime.lime_tabular
 data = pd.read_csv('data/data.csv')
 
 pca_obj = pca.getPCA(n_components=4)
@@ -18,7 +18,7 @@ if my_file.is_file():
     final_data = pd.read_csv('pca_data/pca_data.csv')
 else:
     # remove class columns and un-necessery cols
-    data2 = data1.dropna().drop(['nameOrig', 'nameDest','isFlaggedFraud','isFraud'], axis=1)
+    data2 = data1.dropna().drop(['nameOrig', 'nameDest','isFraud'], axis=1)
     scaled = pca_obj.apply_scale(data2)
     x_scaled_pca = pca_obj.apply_pca(scaled)
     
@@ -28,12 +28,14 @@ else:
 X=final_data.drop(['isFraud'], axis=1)
 y=final_data['isFraud']
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
+X_us , y_us = smote.appy_undersample(X,y)
+
+X_train, X_test, y_train, y_test = train_test_split(X_us, y_us, test_size = 0.3, random_state = 42)
 #apply SMOTE
-X_train_s, y_train_s, X_test_s, y_test_s = smote.apply_smote(X_train, y_train, X_test, y_test)
+#X_train_s, y_train_s, X_test_s, y_test_s = smote.apply_smote(X_train, y_train, X_test, y_test)
 
 # train and get predition
-obj_SVM = SVM.getSVM(X_train=X_train_s, X_test=X_test_s, y_train=y_train_s, y_test=y_test_s, C=1,  kernel='rbf', random_state=0)
+obj_SVM = SVM.getSVM(X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test, C=1,  kernel='rbf', random_state=0)
 obj_SVM.apply_svm()
 obj_SVM.save_model()
 
@@ -43,6 +45,4 @@ print("precission", average_precision)
 print("cls report", cls_report)
 #pca_obj.apply_scale(data)
 
-explainer = lime.lime_tabular.LimeTabularExplainer(train, feature_names=iris.feature_names, 
-                                                    class_names=iris.target_names, discretize_continuous=True)
-                                                   
+
